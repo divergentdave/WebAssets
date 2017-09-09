@@ -371,13 +371,14 @@ def main():
     tree = lxml.etree.ElementTree(svg)
 
     defs = lxml.etree.SubElement(svg, "defs")
-    tan30 = math.tan(math.radians(30))
+    cos30 = math.cos(math.radians(30))
+    sin30 = math.sin(math.radians(30))
     gradient = lxml.etree.SubElement(
         defs, "linearGradient", id=GRADIENT_ID,
-        x1="{:.6f}".format((1 - tan30) / 2),
-        y1="0",
-        x2="{:.6f}".format((1 + tan30) / 2),
-        y2="1"
+        x1="{:.6f}".format((1 - sin30) / 2),
+        y1="{:.6f}".format((1 - cos30) / 2),
+        x2="{:.6f}".format((1 + sin30) / 2),
+        y2="{:.6f}".format((1 + cos30) / 2)
     )
     lxml.etree.SubElement(gradient, "stop", offset="0%") \
         .set("stop-color", GREEN)
