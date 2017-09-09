@@ -107,7 +107,7 @@ def draw_chain(parent, spline_points, parity):
                                                          "g",
                                                          transform=xform)
                 draw_circles(translated_group, (0, 0))
-                
+
                 # Distance between the outside of the two circles
                 d = (math.sqrt((point_a[0] - point_b[0]) ** 2 +
                                (point_a[1] - point_b[1]) ** 2) -
@@ -120,37 +120,73 @@ def draw_chain(parent, spline_points, parity):
                 if not parity:
                     # Angle that marks the location of tangency between circles
                     theta = math.atan2(h, CHAIN_LINK_CIRCLE_RADIUS + d / 2)
-                    sintheta=math.sin(theta)
-                    costheta=math.cos(theta)
+                    sintheta = math.sin(theta)
+                    costheta = math.cos(theta)
 
                     r1 = CHAIN_LINK_CIRCLE_RADIUS * FUDGE_FACTOR_RATIO
                     r2 = CHAIN_LINK_CIRCLE_RADIUS
-                    pathspec = ("M {x1:.6f} {y1:.6f} A {r1} {r1} 0 0 1 {x2:.6f} {y2:.6f} "
-                                "L {x3:.6f} {y3:.6f} A {r2} {r2} 0 0 1 {x4:.6f} {y4:.6f} "
-                                "L {x5:.6f} {y5:.6f} A {r1} {r1} 0 0 1 {x6:.6f} {y6:.6f} "
-                                "L {x7:.6f} {y7:.6f} A {r2} {r2} 0 0 1 {x8:.6f} {y8:.6f} "
-                                .format(r1=r1, r2=r2,
-                                        x1=costheta * r1, y1=-sintheta * r1,
-                                        x2=costheta * r1, y2=sintheta * r1,
-                                        x3=CHAIN_LINK_CIRCLE_RADIUS + d / 2 - costheta * r2, y3=h - sintheta * r2,
-                                        x4=CHAIN_LINK_CIRCLE_RADIUS + d / 2 + costheta * r2, y4=h - sintheta * r2,
-                                        x5=2 * CHAIN_LINK_CIRCLE_RADIUS + d - costheta * r1, y5=sintheta * r1,
-                                        x6=2 * CHAIN_LINK_CIRCLE_RADIUS + d - costheta * r1, y6=-sintheta * r1,
-                                        x7=CHAIN_LINK_CIRCLE_RADIUS + d / 2 + costheta * r2, y7=-h + sintheta * r2,
-                                        x8=CHAIN_LINK_CIRCLE_RADIUS + d / 2 - costheta * r2, y8=-h + sintheta * r2))
-                    lxml.etree.SubElement(translated_group , "path", d=pathspec)
+                    pathspec = (
+                        "M {x1:.6f} {y1:.6f} "
+                        "A {r1} {r1} 0 0 1 {x2:.6f} {y2:.6f} "
+                        "L {x3:.6f} {y3:.6f} "
+                        "A {r2} {r2} 0 0 1 {x4:.6f} {y4:.6f} "
+                        "L {x5:.6f} {y5:.6f} "
+                        "A {r1} {r1} 0 0 1 {x6:.6f} {y6:.6f} "
+                        "L {x7:.6f} {y7:.6f} "
+                        "A {r2} {r2} 0 0 1 {x8:.6f} {y8:.6f} "
+                        .format(
+                            r1=r1,
+                            r2=r2,
+                            x1=costheta * r1,
+                            y1=-sintheta * r1,
+                            x2=costheta * r1,
+                            y2=sintheta * r1,
+                            x3=(CHAIN_LINK_CIRCLE_RADIUS + d / 2
+                                - costheta * r2),
+                            y3=h - sintheta * r2,
+                            x4=(CHAIN_LINK_CIRCLE_RADIUS + d / 2
+                                + costheta * r2),
+                            y4=h - sintheta * r2,
+                            x5=(2 * CHAIN_LINK_CIRCLE_RADIUS + d
+                                - costheta * r1),
+                            y5=sintheta * r1,
+                            x6=(2 * CHAIN_LINK_CIRCLE_RADIUS + d
+                                - costheta * r1),
+                            y6=-sintheta * r1,
+                            x7=(CHAIN_LINK_CIRCLE_RADIUS + d / 2
+                                + costheta * r2),
+                            y7=-h + sintheta * r2,
+                            x8=(CHAIN_LINK_CIRCLE_RADIUS + d / 2
+                                - costheta * r2),
+                            y8=-h + sintheta * r2
+                        )
+                    )
+                    lxml.etree.SubElement(translated_group, "path",
+                                          d=pathspec)
                     parity = True
                 else:
                     r1 = CHAIN_LINK_CIRCLE_RADIUS * CHAIN_LINK_GAP_RATIO
                     sinangle = math.sin(CHAIN_LINK_ANGLE)
                     cosangle = math.cos(CHAIN_LINK_ANGLE)
-                    pathspec = ("M {x1:.6f} {y1:.6f} A {r1} {r1} 0 0 1 {x2:.6f} {y2:.6f} "
-                                "L {x3:.6f} {y3:.6f} A {r1} {r1} 0 0 1 {x4:.6f} {y4:.6f} "
-                                .format(r1=r1,
-                                        x1=cosangle * r1, y1=-sinangle * r1,
-                                        x2=cosangle * r1, y2=sinangle * r1,
-                                        x3=2 * CHAIN_LINK_CIRCLE_RADIUS + d - cosangle * r1, y3=sinangle * r1,
-                                        x4=2 * CHAIN_LINK_CIRCLE_RADIUS + d - cosangle * r1, y4=-sinangle * r1))
+                    pathspec = (
+                        "M {x1:.6f} {y1:.6f} "
+                        "A {r1} {r1} 0 0 1 {x2:.6f} {y2:.6f} "
+                        "L {x3:.6f} {y3:.6f} "
+                        "A {r1} {r1} 0 0 1 {x4:.6f} {y4:.6f} "
+                        .format(
+                            r1=r1,
+                            x1=cosangle * r1,
+                            y1=-sinangle * r1,
+                            x2=cosangle * r1,
+                            y2=sinangle * r1,
+                            x3=(2 * CHAIN_LINK_CIRCLE_RADIUS + d
+                                - cosangle * r1),
+                            y3=sinangle * r1,
+                            x4=(2 * CHAIN_LINK_CIRCLE_RADIUS + d
+                                - cosangle * r1),
+                            y4=-sinangle * r1
+                        )
+                    )
                     lxml.etree.SubElement(translated_group, "path", d=pathspec)
                     parity = False
 
@@ -240,16 +276,19 @@ def chain_clipping_path(parent, spline_points):
 
                 # Angle that marks the location of tangency between circles
                 theta = math.atan2(h, CHAIN_LINK_CIRCLE_RADIUS + d / 2)
-                sintheta=math.sin(theta)
-                costheta=math.cos(theta)
+                sintheta = math.sin(theta)
+                costheta = math.cos(theta)
 
                 # the first and last arcs cause a small amount of overlap
                 # TODO: fix by caching last transform angle
                 p1 = (0, -11)
                 p2 = (costheta * 11, -sintheta * 11)
-                p3 = (CLIP_CIRCLE_RADIUS + d / 2 - costheta * 7, -h + sintheta * 7)
-                p4 = (CLIP_CIRCLE_RADIUS + d / 2 + costheta * 7, -h + sintheta * 7)
-                p5 = (2 * CLIP_CIRCLE_RADIUS + d - costheta * 11, -sintheta * 11)
+                p3 = (CLIP_CIRCLE_RADIUS + d / 2 - costheta * 7,
+                      -h + sintheta * 7)
+                p4 = (CLIP_CIRCLE_RADIUS + d / 2 + costheta * 7,
+                      -h + sintheta * 7)
+                p5 = (2 * CLIP_CIRCLE_RADIUS + d - costheta * 11,
+                      -sintheta * 11)
                 p6 = (2 * CLIP_CIRCLE_RADIUS + d, -11)
                 p1t = apply_affine_transform(xform, p1)
                 p2t = apply_affine_transform(xform, p2)
@@ -257,20 +296,25 @@ def chain_clipping_path(parent, spline_points):
                 p4t = apply_affine_transform(xform, p4)
                 p5t = apply_affine_transform(xform, p5)
                 p6t = apply_affine_transform(xform, p6)
-                pathspec += ("{cmd} {x1:.6f} {y1:.6f} A {r1} {r1} 0 0 1 {x2:.6f} {y2:.6f} "
-                             "L {x3:.6f} {y3:.6f} A {r2} {r2} 0 0 0 {x4:.6f} {y4:.6f} "
-                             "L {x5:.6f} {y5:.6f} A {r1} {r1} 0 0 1 {x6:.6f} {y6:.6f} "
-                             .format(
-                                 cmd=cmd,
-                                 r1=11,
-                                 r2=7,
-                                 x1=p1t[0], y1=p1t[1],
-                                 x2=p2t[0], y2=p2t[1],
-                                 x3=p3t[0], y3=p3t[1],
-                                 x4=p4t[0], y4=p4t[1],
-                                 x5=p5t[0], y5=p5t[1],
-                                 x6=p6t[0], y6=p6t[1],
-                ))
+                pathspec += (
+                    "{cmd} {x1:.6f} {y1:.6f} "
+                    "A {r1} {r1} 0 0 1 {x2:.6f} {y2:.6f} "
+                    "L {x3:.6f} {y3:.6f} "
+                    "A {r2} {r2} 0 0 0 {x4:.6f} {y4:.6f} "
+                    "L {x5:.6f} {y5:.6f} "
+                    "A {r1} {r1} 0 0 1 {x6:.6f} {y6:.6f} "
+                    .format(
+                        cmd=cmd,
+                        r1=11,
+                        r2=7,
+                        x1=p1t[0], y1=p1t[1],
+                        x2=p2t[0], y2=p2t[1],
+                        x3=p3t[0], y3=p3t[1],
+                        x4=p4t[0], y4=p4t[1],
+                        x5=p5t[0], y5=p5t[1],
+                        x6=p6t[0], y6=p6t[1]
+                    )
+                )
                 if cmd == "M":
                     cmd = "L"
         last_point = point
@@ -286,24 +330,26 @@ def draw_gear(parent):
         alpha = math.radians(degrees + 10)
         beta = math.radians(degrees + 25)
         gamma = math.radians(degrees + 40)
-        pathspec += ("{cmd} {x1} {y1} A {r} {r} 0 0 1 {x2} {y2} "
-                     "L {x3} {y3} A {R} {R} 0 0 1 {x4} {y4} "
-                     .format(cmd=cmd,
-                             r=GEAR_MINOR_RADIUS,
-                             R=GEAR_MAJOR_RADIUS,
-                             x1=GEAR_CENTER[0] + GEAR_MINOR_RADIUS * math.cos(alpha),
-                             y1=GEAR_CENTER[1] + GEAR_MINOR_RADIUS * math.sin(alpha),
-                             x2=GEAR_CENTER[0] + GEAR_MINOR_RADIUS * math.cos(beta),
-                             y2=GEAR_CENTER[1] + GEAR_MINOR_RADIUS * math.sin(beta),
-                             x3=GEAR_CENTER[0] + GEAR_MAJOR_RADIUS * math.cos(beta),
-                             y3=GEAR_CENTER[1] + GEAR_MAJOR_RADIUS * math.sin(beta),
-                             x4=GEAR_CENTER[0] + GEAR_MAJOR_RADIUS * math.cos(gamma),
-                             y4=GEAR_CENTER[1] + GEAR_MAJOR_RADIUS * math.sin(gamma)
-                             ))
+        pathspec += (
+            "{cmd} {x1} {y1} A {r} {r} 0 0 1 {x2} {y2} "
+            "L {x3} {y3} A {R} {R} 0 0 1 {x4} {y4} "
+            .format(cmd=cmd,
+                    r=GEAR_MINOR_RADIUS,
+                    R=GEAR_MAJOR_RADIUS,
+                    x1=GEAR_CENTER[0] + GEAR_MINOR_RADIUS * math.cos(alpha),
+                    y1=GEAR_CENTER[1] + GEAR_MINOR_RADIUS * math.sin(alpha),
+                    x2=GEAR_CENTER[0] + GEAR_MINOR_RADIUS * math.cos(beta),
+                    y2=GEAR_CENTER[1] + GEAR_MINOR_RADIUS * math.sin(beta),
+                    x3=GEAR_CENTER[0] + GEAR_MAJOR_RADIUS * math.cos(beta),
+                    y3=GEAR_CENTER[1] + GEAR_MAJOR_RADIUS * math.sin(beta),
+                    x4=GEAR_CENTER[0] + GEAR_MAJOR_RADIUS * math.cos(gamma),
+                    y4=GEAR_CENTER[1] + GEAR_MAJOR_RADIUS * math.sin(gamma)
+                    ))
         cmd = "L"
     pathspec += "Z"
     gear = lxml.etree.SubElement(parent, "path", d=pathspec, fill=GREEN)
     gear.set("clip-path", "url(#{})".format(CLIP_PATH_ID))
+
 
 def draw_circle(parent, center, radius, **kwargs):
     pathspec = (
@@ -327,13 +373,17 @@ def main():
 
     defs = lxml.etree.SubElement(svg, "defs")
     tan30 = math.tan(math.radians(30))
-    gradient = lxml.etree.SubElement(defs, "linearGradient", id=GRADIENT_ID,
-            x1=str((1 - tan30) / 2),
-            y1="0",
-            x2=str((1 + tan30) / 2),
-            y2="1")
-    lxml.etree.SubElement(gradient, "stop", offset="0%").set("stop-color", GREEN)
-    lxml.etree.SubElement(gradient, "stop", offset="100%").set("stop-color", "white")
+    gradient = lxml.etree.SubElement(
+        defs, "linearGradient", id=GRADIENT_ID,
+        x1=str((1 - tan30) / 2),
+        y1="0",
+        x2=str((1 + tan30) / 2),
+        y2="1"
+    )
+    lxml.etree.SubElement(gradient, "stop", offset="0%") \
+        .set("stop-color", GREEN)
+    lxml.etree.SubElement(gradient, "stop", offset="100%") \
+        .set("stop-color", "white")
 
     chain_clipping_path(defs, TOP_SPLINE_POINTS)
 
@@ -350,6 +400,7 @@ def main():
     with open("logo_gear_eyes_text.svg", "wb") as f:
         tree.write(f)
 
+
 def test():
     a = ((1, 2, 3), (4, 5, 6), (7, 8, 9))
     b = ((8, 4, 2), (5, 7, 3), (1, 9, 6))
@@ -358,6 +409,7 @@ def test():
     v = (7, 11)
     av = (32, 89)
     assert apply_affine_transform(a, v) == av
+
 
 if __name__ == "__main__":
     test()
