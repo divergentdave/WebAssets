@@ -330,8 +330,8 @@ def draw_gear(parent):
         beta = math.radians(degrees + 25)
         gamma = math.radians(degrees + 40)
         pathspec += (
-            "{cmd} {x1} {y1} A {r} {r} 0 0 1 {x2} {y2} "
-            "L {x3} {y3} A {R} {R} 0 0 1 {x4} {y4} "
+            "{cmd} {x1:.6f} {y1:.6f} A {r} {r} 0 0 1 {x2:.6f} {y2:.6f} "
+            "L {x3:.6f} {y3:.6f} A {R} {R} 0 0 1 {x4:.6f} {y4:.6f} "
             .format(cmd=cmd,
                     r=GEAR_MINOR_RADIUS,
                     R=GEAR_MAJOR_RADIUS,
@@ -374,9 +374,9 @@ def main():
     tan30 = math.tan(math.radians(30))
     gradient = lxml.etree.SubElement(
         defs, "linearGradient", id=GRADIENT_ID,
-        x1=str((1 - tan30) / 2),
+        x1="{:.6f}".format((1 - tan30) / 2),
         y1="0",
-        x2=str((1 + tan30) / 2),
+        x2="{:.6f}".format((1 + tan30) / 2),
         y2="1"
     )
     lxml.etree.SubElement(gradient, "stop", offset="0%") \
