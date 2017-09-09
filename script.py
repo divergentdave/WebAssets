@@ -307,16 +307,19 @@ def draw_gear(parent):
 
 
 def gradient_circle(parent):
+    draw_circle(parent, GEAR_CENTER, 40, fill="url(#{})".format(GRADIENT_ID))
+
+def draw_circle(parent, center, radius, **kwargs):
     pathspec = (
             "M {cx:.6f} {cy:.6f} "
             "m -{r}, 0 "
             "a {r},{r} 0 1,1 {d},0 "
             "a {r},{r} 0 1,1 -{d},0"
-            .format(cx=GEAR_CENTER[0], cy=GEAR_CENTER[1],
-                    r=40,
-                    d=80)
+            .format(cx=center[0], cy=center[1],
+                    r=radius,
+                    d=2 * radius)
     )
-    lxml.etree.SubElement(parent, "path", d=pathspec, fill="url(#{})".format(GRADIENT_ID))
+    lxml.etree.SubElement(parent, "path", d=pathspec, **kwargs)
 
 
 def main():
@@ -342,6 +345,7 @@ def main():
     draw_chain(left_eye_clipped, BOTTOM_SPLINE_POINTS, True)
     draw_gear(svg)
     gradient_circle(svg)
+    draw_circle(svg, GEAR_CENTER, 10, fill=GREEN)
 
     with open("logo_gear_eyes_text.svg", "wb") as f:
         tree.write(f)
