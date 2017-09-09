@@ -326,13 +326,12 @@ def main():
                              height=str(HEIGHT))
     tree = lxml.etree.ElementTree(svg)
     defs = lxml.etree.SubElement(svg, "defs")
-    cos30 = math.cos(math.radians(30))
-    sin30 = math.sin(math.radians(30))
+    tan30 = math.tan(math.radians(30))
     gradient = lxml.etree.SubElement(defs, "linearGradient", id=GRADIENT_ID,
-            x1=str(sin30),
-            y1=str(-cos30),
-            x2=str(-sin30),
-            y2=str(cos30))
+            x1=str((1 - tan30) / 2),
+            y1="0",
+            x2=str((1 + tan30) / 2),
+            y2="1")
     lxml.etree.SubElement(gradient, "stop", offset="0%").set("stop-color", GREEN)
     lxml.etree.SubElement(gradient, "stop", offset="100%").set("stop-color", "white")
     chain_clipping_path(defs, TOP_SPLINE_POINTS)
