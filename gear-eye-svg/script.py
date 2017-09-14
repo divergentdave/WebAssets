@@ -19,7 +19,8 @@ BOTTOM_SPLINE_POINTS = [(271, 168), (164, 322), (12, 214), (56, 90)]
 EXTRA_CLIP_POINTS = [(20, 300), (300, 300), (300, 168)]
 ITERATION_COUNT = 5000
 CLIP_PATH_ID = "chain-clip"
-GRADIENT_ID = "gradient"
+GRADIENT_LEFT_ID = "gradient-left"
+GRADIENT_RIGHT_ID = "gradient-right"
 GEAR_CENTER = (158, 145)
 GEAR_MAJOR_RADIUS = 70
 GEAR_MINOR_RADIUS = 55
@@ -373,32 +374,51 @@ def main():
     defs = lxml.etree.SubElement(svg, "defs")
     cos30 = math.cos(math.radians(30))
     sin30 = math.sin(math.radians(30))
-    gradient = lxml.etree.SubElement(
-        defs, "linearGradient", id=GRADIENT_ID,
+    gradient_left = lxml.etree.SubElement(
+        defs, "linearGradient", id=GRADIENT_LEFT_ID,
         x1="{:.6f}".format((1 - sin30) / 2),
         y1="{:.6f}".format((1 - cos30) / 2),
         x2="{:.6f}".format((1 + sin30) / 2),
         y2="{:.6f}".format((1 + cos30) / 2)
     )
-    lxml.etree.SubElement(gradient, "stop", offset="0%") \
+    lxml.etree.SubElement(gradient_left, "stop", offset="0%") \
         .set("stop-color", GREEN)
-    lxml.etree.SubElement(gradient, "stop", offset="100%") \
+    lxml.etree.SubElement(gradient_left, "stop", offset="100%") \
+        .set("stop-color", "white")
+    gradient_right = lxml.etree.SubElement(
+        defs, "linearGradient", id=GRADIENT_RIGHT_ID,
+        x1="{:.6f}".format((1 + sin30) / 2),
+        y1="{:.6f}".format((1 - cos30) / 2),
+        x2="{:.6f}".format((1 - sin30) / 2),
+        y2="{:.6f}".format((1 + cos30) / 2)
+    )
+    lxml.etree.SubElement(gradient_right, "stop", offset="0%") \
+        .set("stop-color", GREEN)
+    lxml.etree.SubElement(gradient_right, "stop", offset="100%") \
         .set("stop-color", "white")
 
     chain_clipping_path(defs, TOP_SPLINE_POINTS)
 
-    eye_top = lxml.etree.SubElement(svg, "g", fill=GREEN)
-    draw_chain(eye_top, TOP_SPLINE_POINTS, False)
-    eye_bottom = lxml.etree.SubElement(svg, "g", fill=GREEN)
-    eye_bottom.set("clip-path", "url(#{})".format(CLIP_PATH_ID))
-    draw_chain(eye_bottom, BOTTOM_SPLINE_POINTS, True)
-
-    draw_gear(svg)
-    draw_circle(svg, GEAR_CENTER, 40, fill="url(#{})".format(GRADIENT_ID))
-    draw_circle(svg, GEAR_CENTER, 10, fill=GREEN)
+    left_eye = lxml.etree.SubElement(svg, "g")
+    right_eye = lxml.etree.SubElement(svg, "g",
+                                      transform="translate(700 0) scale(-1 1)")
+    draw_eye(left_eye, GRADIENT_LEFT_ID)
+    draw_eye(right_eye, GRADIENT_RIGHT_ID)
 
     with open("logo_gear_eyes_text.svg", "wb") as f:
         tree.write(f)
+
+
+def draw_eye(parent, gradient_id):
+    eye_top = lxml.etree.SubElement(parent, "g", fill=GREEN)
+    draw_chain(eye_top, TOP_SPLINE_POINTS, False)
+    eye_bottom = lxml.etree.SubElement(parent, "g", fill=GREEN)
+    eye_bottom.set("clip-path", "url(#{})".format(CLIP_PATH_ID))
+    draw_chain(eye_bottom, BOTTOM_SPLINE_POINTS, True)
+
+    draw_gear(parent)
+    draw_circle(parent, GEAR_CENTER, 40, fill="url(#{})".format(gradient_id))
+    draw_circle(parent, GEAR_CENTER, 10, fill=GREEN)
 
 
 def test():
