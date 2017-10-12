@@ -465,7 +465,7 @@ def main():
     draw_text(text, TEXT_PATHS)
 
     with open("logo_gear_eyes_text.svg", "wb") as f:
-        tree.write(f)
+        tree.write(f, xml_declaration=True, encoding="utf-8")
 
 
 def test():
