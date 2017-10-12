@@ -25,6 +25,42 @@ GEAR_CENTER = (158, 145)
 GEAR_MAJOR_RADIUS = 70
 GEAR_MINOR_RADIUS = 55
 
+TEXT_PATHS = [
+    [(14, 305), (49, 305), (43, 311), (32, 311), (32, 356), (26, 356),
+     (26, 311), (8, 311)],
+    [(55, 305), (61, 308), (61, 328), (84, 328), (84, 305), (90, 308),
+     (90, 356), (84, 356), (84, 334), (61, 334), (61, 356), (55, 356)],
+    [(98, 305), (132, 305), (126, 311), (104, 311), (104, 328), (129, 328),
+     (123, 334), (104, 334), (104, 350), (132, 350), (126, 356), (98, 356)],
+    [(162, 305), (193, 305), (187, 311), (161, 311), (161, 350), (187, 350),
+     (187, 334), (170, 334), (176, 328), (193, 328), (193, 350), (187, 356),
+     (162, 356), (155, 349), (155, 312)],
+    [(201, 305), (233, 305), (239, 311), (239, 326), (234, 330), (239, 334),
+     (239, 356), (233, 356), (233, 334), (207, 334), (207, 328), (233, 328),
+     (233, 311), (207, 311), (207, 356), (201, 356)],
+    [(246, 305), (280, 305), (274, 311), (252, 311), (252, 328), (277, 328),
+     (271, 334), (252, 334), (252, 350), (280, 350), (274, 356), (246, 356)],
+    [(283, 305), (317, 305), (311, 311), (289, 311), (289, 328), (314, 328),
+     (308, 334), (289, 334), (289, 350), (317, 350), (311, 356), (283, 356)],
+    [(324, 308), (331, 305), (356, 344), (356, 308), (362, 305), (362, 356),
+     (357, 356), (332, 317), (330, 317), (330, 356), (324, 356)],
+    [(391, 310), (397, 306), (415, 341), (416, 341), (434, 305), (441, 309),
+     (441, 356), (435, 356), (435, 317), (419, 349), (413, 349), (397, 316),
+     (397, 356), (391, 356)],
+    [(452, 312), (459, 305), (484, 305), (490, 311), (490, 356), (484, 356),
+     (490, 311), (490, 356), (484, 356), (484, 337), (458, 337), (458, 331),
+     (484, 331), (484, 311), (458, 311), (458, 356), (452, 356)],
+    [(496, 311), (502, 305), (527, 305), (533, 311), (502, 311), (502, 350),
+     (534, 350), (528, 356), (502, 356), (496, 350)],
+    [(540, 305), (546, 308), (546, 328), (569, 328), (569, 305), (575, 308),
+     (575, 356), (569, 356), (569, 334), (546, 334), (546, 356), (540, 356)],
+    [(588, 305), (594, 305), (594, 356), (588, 356)],
+    [(606, 308), (613, 305), (638, 344), (638, 308), (644, 305), (644, 356),
+     (639, 356), (614, 317), (612, 317), (612, 356), (606, 356)],
+    [(651, 305), (685, 305), (679, 311), (657, 311), (657, 328), (682, 328),
+     (676, 334), (657, 334), (657, 350), (685, 350), (679, 356), (651, 356)],
+]
+
 
 def draw_circles(parent, point):
     """
@@ -364,6 +400,26 @@ def draw_circle(parent, center, radius, **kwargs):
     lxml.etree.SubElement(parent, "path", d=pathspec, **kwargs)
 
 
+def draw_eye(parent, gradient_id):
+    eye_top = lxml.etree.SubElement(parent, "g", fill=GREEN)
+    draw_chain(eye_top, TOP_SPLINE_POINTS, False)
+    eye_bottom = lxml.etree.SubElement(parent, "g", fill=GREEN)
+    eye_bottom.set("clip-path", "url(#{})".format(CLIP_PATH_ID))
+    draw_chain(eye_bottom, BOTTOM_SPLINE_POINTS, True)
+
+    draw_gear(parent)
+    draw_circle(parent, GEAR_CENTER, 40, fill="url(#{})".format(gradient_id))
+    draw_circle(parent, GEAR_CENTER, 10, fill=GREEN)
+
+
+def draw_text(parent, paths):
+    for path in paths:
+        pathspec = ("M {} {} L ".format(*path[0]) +
+                    " L ".join("{} {}".format(*point)
+                               for point in path[1:]))
+        lxml.etree.SubElement(parent, "path", d=pathspec)
+
+
 def main():
     svg = lxml.etree.Element("svg",
                              xmlns=SVG_NS,
@@ -405,20 +461,11 @@ def main():
     draw_eye(left_eye, GRADIENT_LEFT_ID)
     draw_eye(right_eye, GRADIENT_RIGHT_ID)
 
+    text = lxml.etree.SubElement(svg, "g", fill=GREEN)
+    draw_text(text, TEXT_PATHS)
+
     with open("logo_gear_eyes_text.svg", "wb") as f:
         tree.write(f)
-
-
-def draw_eye(parent, gradient_id):
-    eye_top = lxml.etree.SubElement(parent, "g", fill=GREEN)
-    draw_chain(eye_top, TOP_SPLINE_POINTS, False)
-    eye_bottom = lxml.etree.SubElement(parent, "g", fill=GREEN)
-    eye_bottom.set("clip-path", "url(#{})".format(CLIP_PATH_ID))
-    draw_chain(eye_bottom, BOTTOM_SPLINE_POINTS, True)
-
-    draw_gear(parent)
-    draw_circle(parent, GEAR_CENTER, 40, fill="url(#{})".format(gradient_id))
-    draw_circle(parent, GEAR_CENTER, 10, fill=GREEN)
 
 
 def test():
