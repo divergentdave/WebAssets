@@ -1,7 +1,10 @@
 language: node_js
+addons:
+  apt:
+    packages:
+      - python3-flake8
 install:
   - npm install -g svgexport
-  - python3 -m pip install flake8
 script:
   - cd gear-eye-svg
   - python3 -m flake8 script.py
