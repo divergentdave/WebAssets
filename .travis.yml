@@ -19,7 +19,7 @@ deploy:
   acl: public_read
   on:
     repo: divergentdave/WebAssets
-    branch: travis-test
+    branch: master
   skip_cleanup: true
   access_key_id: AKIAJ6U5E5UGUWUGJFIA
   secret_access_key:
