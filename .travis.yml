@@ -1,14 +1,10 @@
 language: node_js
-addons:
-  apt:
-    packages:
-      - python3-flake8
-      - python3-lxml
 install:
   - npm install -g svgexport
 script:
   - cd gear-eye-svg
-  - python3 -m flake8.__main__ script.py
+  - pip3 install flake8 lxml
+  - python3 -m flake8 script.py
   - python3 script.py
   - svgexport logo_gear_eyes_text.svg logo_gear_eyes_text_700_400.png png 700:400
 deploy:
