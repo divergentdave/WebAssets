@@ -8,7 +8,9 @@ script:
   - python3 -m flake8 script.py
   - python3 script.py
   - svgexport logo_gear_eyes_text.svg logo_gear_eyes_text_700_400.png png 700:400
+  - svgexport logo_gear_eyes_text.svg logo_gear_eyes_text_210_120.png png 210:120
   - convert logo_gear_eyes_text_700_400.png -strip logo_gear_eyes_text_700_400.png
+  - convert logo_gear_eyes_text_210_120.png -strip logo_gear_eyes_text_210_120.png
   - popd
 deploy:
   provider: s3
