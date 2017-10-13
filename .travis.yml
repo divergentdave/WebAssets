@@ -2,8 +2,7 @@ language: node_js
 install:
   - npm install -g svgexport
 script:
-  - deactivate
-  - ls ~/virtualenv
+  - . ~/virtualenv/python3.5/bin/activate
   - cd gear-eye-svg
   - pip3 install flake8 lxml
   - python3 -m flake8 script.py
