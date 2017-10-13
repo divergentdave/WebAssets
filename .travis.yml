@@ -1,0 +1,26 @@
+language: node_js
+install:
+  - npm install -g svgexport
+  - . ~/virtualenv/python3.5/bin/activate
+  - pip3 install flake8 lxml
+script:
+  - pushd gear-eye-svg
+  - python3 -m flake8 script.py
+  - python3 script.py
+  - svgexport logo_gear_eyes_text.svg logo_gear_eyes_text_700_400.png png 700:400
+  - svgexport logo_gear_eyes_text.svg logo_gear_eyes_text_210_120.png png 210:120
+  - convert logo_gear_eyes_text_700_400.png -strip logo_gear_eyes_text_700_400.png
+  - convert logo_gear_eyes_text_210_120.png -strip logo_gear_eyes_text_210_120.png
+  - popd
+deploy:
+  provider: s3
+  bucket: greenmachine-web-assets-ci
+  region: ca-central-1
+  acl: public_read
+  on:
+    repo: divergentdave/WebAssets
+    branch: travis-test
+  skip_cleanup: true
+  access_key_id: AKIAJ6U5E5UGUWUGJFIA
+  secret_access_key:
+    secure: "LKzfUUFn6fi/QpvPOHCYF04mHv+NZX3T1mAxELxkhJF9fjHPAeO8rwyS7BE1KpJzEBgOw240C6yH+zZgxBdtNF0OOd0ZPLsCGCATO+IE1kzz1CiMYSNRbyDBV/nKx3ikgQEHA3yUZF/LdMER4ZF/uc2yGP/ifptjR4Z6dfDVIxLC6T2vRU60ZoO6PqeCB4z377p6Tdeyh9SE+dnFGpz8bt9EP2zjspPx5KFP2mblufhcXXQamtRItrft63BDnovOEasbFmnFi7EaRBpYeoEc3mPjUKXxWcYJNYBtiay9xWO5zqZD47Z/gdvm3CQ54f+KUpLP9SRNqOikoDXSzR1aEAEzWPbtDTNqbHFHsvGi2crTU/zQp/pjsV6Cs4fPmpSaC9HsmokQefPAS3cYLwm2cLJBAZCTq1OgyTzXOYwmr49sAMHByvdNOm/OveZaqErWBt57nphDHHS5C9yo52NLiTLI1Uw/XEBGTrbXwI89LfeWt1wllAUwZ5sDkM9BhXrW0hHL85R2KI1//lixylU3L1rGE3aHQcRbxWr7/uf5dbWnXkXfQs4H4/9x74fugh7ALE0M/dCWRBqnseS4oAGiemeN/Gd4wqKUkT/megVv+jlTUB4C8KYhgWpBicMbQWN2mMuMe4+V8uq4iP5QpShX7W2DanQeOQwjX0fv9H8e+fc="
