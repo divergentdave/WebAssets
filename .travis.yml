@@ -3,6 +3,7 @@ addons:
   apt:
     packages:
       - python3-flake8
+      - python3-lxml
 install:
   - npm install -g svgexport
 script:
