@@ -7,6 +7,7 @@ install:
   - npm install -g svgexport
 script:
   - cd gear-eye-svg
+  - python3 --version
   - python3 -m flake8 script.py
   - python3 script.py
   - svgexport logo_gear_eyes_text.svg logo_gear_eyes_text_700_400.png png 700:400
